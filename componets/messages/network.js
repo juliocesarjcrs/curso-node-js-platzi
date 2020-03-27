@@ -6,11 +6,18 @@ const controller = require('./controller')
 const router = express.Router();
 
 router.get('/', function(req, res){
-    console.log(req.headers);
-    res.header({
-        'custom-header': "Nuestro valor perzonalizado"
+    controller.getMessage().then((messaList) =>{
+        response.success(req, res, messaList, 200)
     })
-    response.success(req, res, 'Lista de mensajes')
+    .catch((error) =>{
+        response.error(req, res, 'Unexpected Error', 500, error)  
+    })
+
+    // console.log(req.headers);
+    // res.header({
+    //     'custom-header': "Nuestro valor perzonalizado"
+    // })
+    // response.success(req, res, 'Lista de mensajes')
     // res.status(201).send({error: '', message: 'Creado correctamente'})
     // res.send('Lista de mensajes')
 });

@@ -5,7 +5,7 @@ function addMessage(user, message){
         if(!user || !message){
             console.error('[messageController] No hay usurio o mensaje');
             
-             reject('Los datos osn incorrectos')
+             reject('Los datos son incorrectos')
              return false
         }
         const fullMessage = {

@@ -4,9 +4,21 @@ const express = require('express');
 const response = require('../../network/response');
 const controller = require('./controller')
 const router = express.Router();
+/*
+si yo quiero hacer la siguiente consulta ++**SQL SELECT * FROM messages WHERE user LIKE “%carl%” **++en mongo con node
+¿Cómo sería?
+{"user": /carl/}
+En caso de que queramos hacer una búsqueda por el nombre ignorando mayúsculas o minúsculas se puede implementar el siguiente código:
 
+  let userFilter = {};
+  if (user) {
+    userFilter.user = new RegExp(user, "i");
+  }
+Mongo puede utilizar Regular Expressions para realizar búsquedas y en estas es posible indicarle que busque “case-insensitive”. Esto se logra con el flag “i” que vemos en el código. Este código se traduce a: /usuario/i.
+*/
 router.get('/', function(req, res){
-    controller.getMessage().then((messaList) =>{
+    const filterMessages = req.query.user || null;
+    controller.getMessage(filterMessages).then((messaList) =>{
         response.success(req, res, messaList, 200)
     })
     .catch((error) =>{

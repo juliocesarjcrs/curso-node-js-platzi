@@ -32,7 +32,17 @@ async function getMessage(message){
     const messages = await Model.find();
     return messages;
 }
+async function updateText(id, message){
+    const foundMessage = await Model.findOne({
+        _id:id // va  al modelo trae todo los registros y compara con el id y trae solo ese
+    });
+    foundMessage.message = message;
+    const newMessage = await foundMessage.save();
+    return newMessage;
+
+}
 module.exports={
     add: addMessage,
-    list: getMessage
+    list: getMessage,
+    updateText: updateText
 }

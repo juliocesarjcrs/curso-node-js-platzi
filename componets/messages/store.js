@@ -28,8 +28,9 @@ function addMessage(message){
     const myMessage = new Model(message)
     myMessage.save();
 }
-function getMessage(message){
-    return list;
+async function getMessage(message){
+    const messages = await Model.find();
+    return messages;
 }
 module.exports={
     add: addMessage,

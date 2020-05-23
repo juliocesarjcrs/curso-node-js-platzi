@@ -1,18 +1,15 @@
 const store = require('./store')
-function addMessage(chat,user, message){
+function addUser(name){
     // console.log('user', user);
     return new Promise((resolve, reject)=>{
-        if(!user || !message){
-            console.error('[messageController] No hay usurio o mensaje');
+        if(!name ){
+            console.error('[userController] No hay usurio ');
             
              reject('Los datos son incorrectos')
              return false
         }
         const fullMessage = {
-            chat: chat,
-            user: user,
-            message: message,
-            date: new Date()
+            name: name
         }
         store.add(fullMessage)
         resolve(fullMessage)
@@ -20,7 +17,7 @@ function addMessage(chat,user, message){
     })
     
 }
-function getMessage(filterUser){
+function getUsers(filterUser){
     return new Promise((resolve, reject)=>{
         resolve(store.list(filterUser));
     })
@@ -52,8 +49,8 @@ function deleteMessage(id) {
     });
 }
 module.exports = {
-    addMessage,
-    getMessage,
+    addUser,
+    getUsers,
     updateMessage,
     deleteMessage
 }

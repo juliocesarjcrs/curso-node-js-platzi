@@ -1,26 +1,27 @@
 // const list = [];
-const db = require('mongoose');
+// const db = require('mongoose');
 const Model = require('./model')
-db.Promise = global.Promise;
-// mongodb+srv://julio:julio747@cluster0-b0vla.mongodb.net/test?retryWrites=true&w=majority
-const user = 'julio';
-const pass = 'julio747';
-const host = 'cluster0-b0vla.mongodb.net'
-const database = 'telegram'
-const uri = `mongodb+srv://${user}:${pass}@${host}/test?retryWrites=true&w=majority`;
-// console.log('uri', uri);
 
-db.connect(uri,{
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-    dbName: database
-})
-.then(() =>{
-    console.log('[db] Conectada con éxito');  
-}).catch(err =>{
+// db.Promise = global.Promise;
+// // mongodb+srv://julio:julio747@cluster0-b0vla.mongodb.net/test?retryWrites=true&w=majority
+// const user = 'julio';
+// const pass = 'julio747';
+// const host = 'cluster0-b0vla.mongodb.net'
+// const database = 'telegram'
+// const uri = `mongodb+srv://${user}:${pass}@${host}/test?retryWrites=true&w=majority`;
+// // console.log('uri', uri);
+
+// db.connect(uri,{
+//     useNewUrlParser: true,
+//     useUnifiedTopology: true,
+//     dbName: database
+// })
+// .then(() =>{
+//     console.log('[db] Conectada con éxito');  
+// }).catch(err =>{
     
-    console.error('[db]', err);
-})
+//     console.error('[db]', err);
+// })
 
 
 function addMessage(message){
@@ -29,12 +30,25 @@ function addMessage(message){
     myMessage.save();
 }
 async function getMessage(filteuser){
-    let filter = {};
-    if(filteuser !== null){
-        filter = {user: filteuser};
-    }
-    const messages = await Model.find(filter);
-    return messages;
+    return new Promise((resolve, reject)=>{
+        let filter = {};
+        if(filteuser !== null){
+            filter = {user: filteuser};
+        }
+        Model.find(filter)
+        .populate('user')
+        .exec((error, populated)=>{
+            if(error){
+                reject(error);
+                return false;
+            }
+            resolve(populated);          
+        })
+        // .catch( e =>{
+        //     reject(e);
+        // });
+        // resolve (messages);
+    })
 }
 async function updateText(id, message){
     const foundMessage = await Model.findOne({

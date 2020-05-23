@@ -1,9 +1,13 @@
 // Aqui va toda la capa de red, la encargada de ricibir la petición http, 
 // procesar la información y enviarla al controlador
 const express = require('express');
+const multer = require('multer'); // instala npm i multer // para cargar archivos
 const response = require('../../network/response');
 const controller = require('./controller')
 const router = express.Router();
+const upload = multer({
+    dest:'uploads/' // carpeta destino
+})
 /*
 si yo quiero hacer la siguiente consulta ++**SQL SELECT * FROM messages WHERE user LIKE “%carl%” **++en mongo con node
 ¿Cómo sería?
@@ -17,7 +21,7 @@ En caso de que queramos hacer una búsqueda por el nombre ignorando mayúsculas 
 Mongo puede utilizar Regular Expressions para realizar búsquedas y en estas es posible indicarle que busque “case-insensitive”. Esto se logra con el flag “i” que vemos en el código. Este código se traduce a: /usuario/i.
 */
 router.get('/', function(req, res){
-    const filterMessages = req.query.user || null;
+    const filterMessages = req.query.chat || null;
     controller.getMessage(filterMessages).then((messaList) =>{
         response.success(req, res, messaList, 200)
     })
@@ -33,8 +37,8 @@ router.get('/', function(req, res){
     // res.status(201).send({error: '', message: 'Creado correctamente'})
     // res.send('Lista de mensajes')
 });
-router.post('/', function(req, res){
-    controller.addMessage(req.body.user, req.body.message)
+router.post('/',upload.single('file'), function(req, res){
+    controller.addMessage(req.body.chat, req.body.user, req.body.message)
     .then((fullMessage)=>{
         response.success(req, res, fullMessage, 201)   
     })

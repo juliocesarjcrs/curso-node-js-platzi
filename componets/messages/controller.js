@@ -1,5 +1,5 @@
 const store = require('./store')
-function addMessage(chat,user, message){
+function addMessage(chat,user, message, file){
     // console.log('user', user);
     return new Promise((resolve, reject)=>{
         if(!user || !message){
@@ -8,11 +8,16 @@ function addMessage(chat,user, message){
              reject('Los datos son incorrectos')
              return false
         }
+        let fileUrl = '';
+        if (file) {
+            fileUrl = 'http://localhost:4000/app/files/' + file.filename;
+        }
         const fullMessage = {
             chat: chat,
             user: user,
             message: message,
-            date: new Date()
+            date: new Date(),
+            file: fileUrl,
         }
         store.add(fullMessage)
         resolve(fullMessage)

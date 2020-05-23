@@ -6,7 +6,7 @@ const response = require('../../network/response');
 const controller = require('./controller')
 const router = express.Router();
 const upload = multer({
-    dest:'uploads/' // carpeta destino
+    dest:'public/files/' // carpeta destino
 })
 /*
 si yo quiero hacer la siguiente consulta ++**SQL SELECT * FROM messages WHERE user LIKE “%carl%” **++en mongo con node
@@ -38,7 +38,7 @@ router.get('/', function(req, res){
     // res.send('Lista de mensajes')
 });
 router.post('/',upload.single('file'), function(req, res){
-    controller.addMessage(req.body.chat, req.body.user, req.body.message)
+    controller.addMessage(req.body.chat, req.body.user, req.body.message, req.file)
     .then((fullMessage)=>{
         response.success(req, res, fullMessage, 201)   
     })

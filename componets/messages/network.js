@@ -38,6 +38,8 @@ router.get('/', function(req, res){
     // res.send('Lista de mensajes')
 });
 router.post('/',upload.single('file'), function(req, res){
+    console.log('c0ntroller mensaje');
+    
     controller.addMessage(req.body.chat, req.body.user, req.body.message, req.file)
     .then((fullMessage)=>{
         response.success(req, res, fullMessage, 201)   

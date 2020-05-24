@@ -1,9 +1,8 @@
 const store = require('./store')
+const socket = require('../../socket').socket;
 function addMessage(chat,user, message, file){
-    // console.log('user', user);
     return new Promise((resolve, reject)=>{
         if(!user || !message){
-            console.error('[messageController] No hay usurio o mensaje');
             
              reject('Los datos son incorrectos')
              return false
@@ -19,7 +18,10 @@ function addMessage(chat,user, message, file){
             date: new Date(),
             file: fileUrl,
         }
-        store.add(fullMessage)
+        
+        store.add(fullMessage);
+        socket.io.emit('mensaje', fullMessage)
+        // http://localhost:4000/app/socket.html
         resolve(fullMessage)
 
     })
